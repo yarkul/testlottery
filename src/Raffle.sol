@@ -15,7 +15,7 @@ contract Raffle is VRFConsumerBaseV2{
 
     error Raffle__NotEnogthEthSent();
     error Raffle__TransferFailed();
-    error Raffle__RaffleNotOption();
+    error Raffle__RaffleNotOpen();
     error Raffle__UpkeepNotNeeded(uint256 currentBalance, uint256 numPlayers, uint256 raffleState);
 
     enum RaffleState{
@@ -64,7 +64,7 @@ contract Raffle is VRFConsumerBaseV2{
         }
 
         if(s_raffleState != RaffleState.OPEN){
-            revert Raffle__RaffleNotOption();
+            revert Raffle__RaffleNotOpen();
         }
         
         s_players.push(payable(msg.sender));
@@ -143,4 +143,11 @@ contract Raffle is VRFConsumerBaseV2{
         return i_entranceFee;
     }
 
+    function getRaffleState() external view returns(RaffleState){
+        return s_raffleState;
+    }
+
+    function getPlayer(uint256 indexOfPlayer) external view returns(address){
+        return s_players[indexOfPlayer];
+    }
 }
